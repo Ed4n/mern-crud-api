@@ -1,3 +1,4 @@
+import { json } from "express"
 import Task from "../models/task.model.js"
 
 
@@ -26,7 +27,7 @@ export const getTask = async (req, res) => {
     if (!id) return res.status(404).json({ message: "An ID is required!" })
 
     try {
-        const task = await Task.findById(id)
+        const task = await Task.findById(id).populate("user", "username email")
         if (!task) return res.status(404).json({ message: "Task not found" })
 
         return res.status(200).json({
@@ -90,13 +91,13 @@ export const updateTask = async (req, res) => {
     if (!id) res.status(404).json({ message: "an ID is rquired" })
 
     try {
-        const updatedTask = await Task.findByIdAndUpdate(id, body, { new: true })
+        const updatedTask = await Task.findByIdAndUpdate(id, body, { new: true }).populate("user", "username email")
         if (!updatedTask) res.status(404).json({ message: "Task Not Found" })
 
         return res.status(200).json({
             succes: true,
             message: "Task Updated Succesfully",
-            data: updateTask
+            data: updatedTask
 
         })
 
@@ -116,9 +117,9 @@ export const deleteTask = async (req, res) => {
 
     try {
         const deletedTask = await Task.findByIdAndDelete(id)
-        if (!deleteTask) res.status(404).json({ message: "Task Not Found" })
+        if (!deletedTask) res.status(404).json({ message: "Task Not Found" })
 
-        return res.status(200).json({ message: `The Task with the title: "${deletedTask.title}" was deleted succesfully` })
+        return res.sendStatus(204)// 204 code means that the task were succesfully but it won't return anything - Also I have to add "sendStatus()" to make it work.
 
     } catch (err) {
         return res.status(500).json({
