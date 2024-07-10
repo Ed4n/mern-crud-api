@@ -6,4 +6,11 @@ This is a project to practice & learn the authentication process including valid
 
 ## 📄 Docs
 
-[Zod](./docs/zod.md)
+### Libraries
+
+* [Zod](./docs/zod.md)
+
+### Auth Proces
+
+* [JWT Auth](./docs/jwt-autentication.md)
+* [Protected Routes](./docs/protected-routes.md)

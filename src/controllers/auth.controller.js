@@ -39,7 +39,6 @@ export const register = async (req, res) => {
             details: err
         })
     }
-
 }
 
 export const login = async (req, res) => {
@@ -55,19 +54,20 @@ export const login = async (req, res) => {
             }
         )
 
-        const isMatch = await bcrypt.compare(password, userFound.password)
+        const isMatch = await bcrypt.compare(password, userFound.password) // este retorna un boolean
 
         if (!isMatch) return res.status(400).json({
             success: false, message: "Incorrect Passowrd"
         })
 
-        const token = await createAccesToken({ id: userFound._id })
+        const token = await createAccesToken({ id: userFound._id }) // se crea un token con el id del usuario (este es una serie de carateres muy diferente al id.)
         res.cookie('token', token)
 
         return res.status(200).json({
             success: true,
             message: "Login succesfully",
             data: {
+                token: token,
                 username: userFound.username,
                 email: userFound.email,
                 createdAt: userFound.createdAt,
