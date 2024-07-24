@@ -9,16 +9,27 @@ export const register = async (req, res) => {
     const { email, username, password } = req.body
 
     try {
+
+        const emailFound = await User.findOne({ email })
+        const usernameFound = await User.findOne({ username })
+
+        if (usernameFound)
+            return res.status(400).json({ error: ["Username already exist."] })
+
+        if (emailFound)
+            return res.status(400).json({ error: ["Email already exist."] })
+
+
         const passwordHash = await bcrypt.hash(password, 10)
 
-        const newUer = new User({
+        const newUser = new User({
             username,
             email,
             password: passwordHash
 
         })
 
-        const savedUser = await newUer.save()
+        const savedUser = await newUser.save()
 
         const token = await createAccesToken({ id: savedUser._id })
         res.cookie('token', token)
@@ -67,7 +78,6 @@ export const login = async (req, res) => {
             success: true,
             message: "Login succesfully",
             data: {
-                token: token,
                 username: userFound.username,
                 email: userFound.email,
                 createdAt: userFound.createdAt,
