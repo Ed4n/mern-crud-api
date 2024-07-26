@@ -5,14 +5,15 @@ import "./src/db.js";
 import cookieParser from "cookie-parser"
 import cors from "cors"
 
-import authRoutes from "./src/routes/auth.route.js"
+import authRoutes from "./src/routes/auth.routes.js"
 import tasksRoutes from "./src/routes/tasks.routes.js";
 
 
 
 const app = express()
 app.use(cors({
-    origin: 'http://localhost:5173'
+    origin: 'http://localhost:5173',
+    credentials: true
 }))
 app.use(express.json())
 app.use(cookieParser()) // This is used to read the cookies, workds similar like express,json() but this one is not build in
